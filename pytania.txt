@@ -1,0 +1,52 @@
+Dekoratory
+Czym jest dekorator w Pythonie i w jakim celu się go używa?
+Funkcje
+Czym różni się funkcja z parametrem domyślnym od funkcji z parametrem *args i **kwargs?
+Pliki
+Jak otworzyć plik tekstowy do odczytu i wczytać jego zawartość linia po linii?
+Pliki
+Napisz program, który zapisuje listę imion do pliku "imiona.txt", a następnie odczytuje je i wypisuje na ekran.
+Dekoratory
+Napisz dekorator @log_time, który mierzy czas wykonania dekorowanej funkcji.
+Dekoratory
+Wyjaśnij różnicę między dekoratorem z parametrem a bez parametru. Podaj przykład.
+Dekoratory
+Czy dekoratory można stosować do metod klas? Uzasadnij odpowiedź i pokaż przykład.
+Dekoratory
+Napisz dekorator, który sprawdza, czy użytkownik jest zalogowany, zanim wykona funkcję.
+Dekoratory
+Do czego służy funkcja `functools.wraps` w dekoratorach?
+Dekoratory
+Napisz dekorator, który ograniczy możliwość wywołania funkcji do jednej próby na minutę.
+Pliki
+W jaki sposób sprawdzić, czy plik istnieje i nie jest pusty?
+Pliki
+Czym różni się tryb otwierania pliku 'w' od 'a'?
+Pliki
+Jak bezpiecznie otworzyć plik do zapisu, aby nie stracić danych w przypadku błędu?
+Pliki
+W jaki sposób odczytać plik CSV i wypisać jego zawartość jako listę słowników?
+Pliki
+Jak odczytać cały plik jako jedną zmienną typu `str`?
+Pliki
+W jaki sposób można wczytać plik JSON i zapisać go jako słownik w Pythonie?
+Pliki
+Napisz program, który zlicza liczbę słów w pliku tekstowym.
+Pliki
+Jak zamknąć plik po zakończeniu operacji, jeśli nie używa się `with open(...)`?
+Pliki
+Napisz program, który tworzy kopię pliku tekstowego.
+Pliki
+W jaki sposób można obsłużyć wyjątek, gdy plik nie istnieje?
+Dekoratory
+Czym różni się dekorator funkcji od dekoratora klasy?
+Dekoratory
+Napisz dekorator, który loguje nazwę funkcji i argumenty przy każdym jej wywołaniu.
+Dekoratory
+Dlaczego warto stosować dekoratory zamiast powtarzania logiki w każdej funkcji?
+Dekoratory
+Jakie są zalety stosowania dekoratorów w większych projektach?
+Dekoratory
+Czy dekoratory mogą być zagnieżdżane? Wyjaśnij i podaj przykład.
+Dekoratory
+Napisz dekorator, który wywołuje funkcję tylko w dni robocze.

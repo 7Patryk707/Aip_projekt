@@ -1,37 +1,39 @@
 import generator
 
-print(f'{"-------MENU------"}\n{"1 - Petla\n2 - Dekoratory\n3 - Miasta\n4 - Kilka tematów\n'exit' - Wyjście"}\n-----------------')
+nr_kol = input('Podaj numer kolokwium: ')
 
-i = 1 
+tematy_kol = {}
 
-nr_kol = input('Podaj nr kol: ')
+with open('pytania.txt') as f:
+    wiersze = f.readlines()
+    licznik_pom = 1
+    for i, temat in enumerate(wiersze):
+        if i % 2 == 0:
+            if temat.strip() not in tematy_kol.values():
+                tematy_kol[licznik_pom] = temat.strip()
+                licznik_pom += 1
 
+j = 1 
 while True:
-    wybor = input("Wybierz  ")
-    
-    # tworzenie pliku
+    print("-------MENU------")
+    for i, temat in tematy_kol.items():
+        print(f'{i} - {temat}')
+    print('q - Kolokwium z kilku tematów\nexit - Wyjście\n-----------------')
+    wybor = input("Wprowadź: ")
 
     match wybor.capitalize():
-        case "1":
-            generator.utworz_zadanie(wybor,nr_kol)
-        case "2":
-            generator.utworz_zadanie(wybor,nr_kol)
+        case wybor if wybor.isdigit() and 1 <= int(wybor) <= len(tematy_kol):
+            generator.utworz_zadanie(tematy_kol[int(wybor)], nr_kol)
+            print(f'Utworzono plik kolokwium_{nr_kol}.ipynb')
+            break
 
-        case "3":
-            generator.utworz_zadanie(wybor,nr_kol)
-
-        case "4":
-            generator.utworz_kilka_zadan(nr_kol)
-            
+        case "Q":
+            generator.utworz_kilka_zadan(nr_kol, tematy_kol)
+            print(f'Utworzono plik kolokwium_{nr_kol}.ipynb')
+            break
 
         case 'Exit':
-            print(f'Utworzono plik kolokwium{nr_kol}.txt')
             break
     
         case default:
             print('Brak takiej opcji!')
-            i-=1
-
-    print(f"Ilość zadań: {i}")
-    i+=1
-
