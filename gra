@@ -5,7 +5,7 @@ import sys
 pygame.init()
 SZEROKOSC, WYSOKOSC = 600, 400
 OKNO = pygame.display.set_mode((SZEROKOSC, WYSOKOSC))
-pygame.display.set_caption("Pong z AI")
+pygame.display.set_caption("Ping Pong")
 
 # Kolory
 BIALY = (255, 255, 255)
