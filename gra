@@ -3,105 +3,105 @@ import sys
 
 # Inicjalizacja
 pygame.init()
-WIDTH, HEIGHT = 600, 400
-WIN = pygame.display.set_mode((WIDTH, HEIGHT))
+SZEROKOSC, WYSOKOSC = 600, 400
+OKNO = pygame.display.set_mode((SZEROKOSC, WYSOKOSC))
 pygame.display.set_caption("Pong z AI")
 
 # Kolory
-WHITE = (255, 255, 255)
-GREEN = (0, 255, 0)
-RED = (255, 0, 0)
-BLACK = (0, 0, 0)
+BIALY = (255, 255, 255)
+ZIELONY = (0, 255, 0)
+CZERWONY = (255, 0, 0)
+CZARNY = (0, 0, 0)
 
 # Parametry
-PADDLE_WIDTH, PADDLE_HEIGHT = 100, 10
-BALL_RADIUS = 10
-ball_speed_increment = 0.3  # zwiększone przyspieszenie
-ai_speed = 7                # zwiększona prędkość AI
-font = pygame.font.SysFont(None, 36)
-clock = pygame.time.Clock()
+SZEROKOSC_PALETKI, WYSOKOSC_PALETKI = 100, 10
+PROMIEN_PILKI = 10
+przyspieszenie_pilki = 0.3
+predkosc_ai = 5
+czcionka = pygame.font.SysFont(None, 36)
+zegar = pygame.time.Clock()
 
-def reset_game():
-    global player, ai, ball, ball_speed
-    player = pygame.Rect(WIDTH // 2 - PADDLE_WIDTH // 2, HEIGHT - 30, PADDLE_WIDTH, PADDLE_HEIGHT)
-    ai = pygame.Rect(WIDTH // 2 - PADDLE_WIDTH // 2, 20, PADDLE_WIDTH, PADDLE_HEIGHT)
-    ball = pygame.Rect(WIDTH // 2, HEIGHT // 2, BALL_RADIUS, BALL_RADIUS)
-    ball_speed = [4, 4]
+def zresetuj_gre():
+    global gracz, ai, pilka, predkosc_pilki
+    gracz = pygame.Rect(SZEROKOSC // 2 - SZEROKOSC_PALETKI // 2, WYSOKOSC - 30, SZEROKOSC_PALETKI, WYSOKOSC_PALETKI)
+    ai = pygame.Rect(SZEROKOSC // 2 - SZEROKOSC_PALETKI // 2, 20, SZEROKOSC_PALETKI, WYSOKOSC_PALETKI)
+    pilka = pygame.Rect(SZEROKOSC // 2, WYSOKOSC // 2, PROMIEN_PILKI, PROMIEN_PILKI)
+    predkosc_pilki = [4, 4]
 
-def draw_objects():
-    WIN.fill(BLACK)
-    pygame.draw.rect(WIN, GREEN, player)
-    pygame.draw.rect(WIN, RED, ai)
-    pygame.draw.ellipse(WIN, WHITE, ball)
+def rysuj_obiekty():
+    OKNO.fill(CZARNY)
+    pygame.draw.rect(OKNO, ZIELONY, gracz)
+    pygame.draw.rect(OKNO, CZERWONY, ai)
+    pygame.draw.ellipse(OKNO, BIALY, pilka)
     pygame.display.flip()
 
-def show_game_over():
-    WIN.fill(BLACK)
-    text1 = font.render("KONIEC GRY", True, RED)
-    text2 = font.render("Naciśnij R, aby zrestartować", True, WHITE)
-    WIN.blit(text1, (WIDTH // 2 - 80, HEIGHT // 2 - 30))
-    WIN.blit(text2, (WIDTH // 2 - 150, HEIGHT // 2 + 10))
+def pokaz_koniec_gry():
+    OKNO.fill(CZARNY)
+    tekst1 = czcionka.render("KONIEC GRY", True, CZERWONY)
+    tekst2 = czcionka.render("Naciśnij R, aby zrestartować", True, BIALY)
+    OKNO.blit(tekst1, (SZEROKOSC // 2 - 80, WYSOKOSC // 2 - 30))
+    OKNO.blit(tekst2, (SZEROKOSC // 2 - 150, WYSOKOSC // 2 + 10))
     pygame.display.flip()
 
 def main():
-    reset_game()
-    running = True
-    game_over = False
+    zresetuj_gre()
+    dziala = True
+    koniec = False
 
-    while running:
-        clock.tick(60)
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
+    while dziala:
+        zegar.tick(60)
+        for zdarzenie in pygame.event.get():
+            if zdarzenie.type == pygame.QUIT:
+                dziala = False
 
-        keys = pygame.key.get_pressed()
+        klawisze = pygame.key.get_pressed()
 
-        if game_over:
-            if keys[pygame.K_r]:
-                reset_game()
-                game_over = False
+        if koniec:
+            if klawisze[pygame.K_r]:
+                zresetuj_gre()
+                koniec = False
             continue
 
-        # Sterowanie gracza (zwiększona szybkość)
-        if keys[pygame.K_a]:
-            player.x -= 8
-        if keys[pygame.K_d]:
-            player.x += 8
-        player.x = max(0, min(WIDTH - PADDLE_WIDTH, player.x))
+        # Ruch gracza (zwiększona szybkość)
+        if klawisze[pygame.K_a]:
+            gracz.x -= 8
+        if klawisze[pygame.K_d]:
+            gracz.x += 8
+        gracz.x = max(0, min(SZEROKOSC - SZEROKOSC_PALETKI, gracz.x))
 
-        # AI ruch (zwiększona szybkość)
-        if ai.centerx < ball.centerx:
-            ai.x += ai_speed
-        elif ai.centerx > ball.centerx:
-            ai.x -= ai_speed
-        ai.x = max(0, min(WIDTH - PADDLE_WIDTH, ai.x))
+        # Ruch AI
+        if ai.centerx < pilka.centerx:
+            ai.x += predkosc_ai
+        elif ai.centerx > pilka.centerx:
+            ai.x -= predkosc_ai
+        ai.x = max(0, min(SZEROKOSC - SZEROKOSC_PALETKI, ai.x))
 
         # Ruch piłki
-        ball.x += int(ball_speed[0])
-        ball.y += int(ball_speed[1])
+        pilka.x += int(predkosc_pilki[0])
+        pilka.y += int(predkosc_pilki[1])
 
-        # Odbicie od ścian
-        if ball.left <= 0 or ball.right >= WIDTH:
-            ball_speed[0] *= -1
+        # Odbicia od ścian
+        if pilka.left <= 0 or pilka.right >= SZEROKOSC:
+            predkosc_pilki[0] *= -1
 
-        # Odbicie od paletek i przyspieszenie
-        if ball.colliderect(player) and ball_speed[1] > 0:
-            ball_speed[1] *= -1
-            ball_speed[0] *= 1 + ball_speed_increment
-            ball_speed[1] *= 1 + ball_speed_increment
+        # Odbicia od paletek i przyspieszenie
+        if pilka.colliderect(gracz) and predkosc_pilki[1] > 0:
+            predkosc_pilki[1] *= -1
+            predkosc_pilki[0] *= 1 + przyspieszenie_pilki
+            predkosc_pilki[1] *= 1 + przyspieszenie_pilki
 
-        if ball.colliderect(ai) and ball_speed[1] < 0:
-            ball_speed[1] *= -1
-            ball_speed[0] *= 1 + ball_speed_increment
-            ball_speed[1] *= 1 + ball_speed_increment
+        if pilka.colliderect(ai) and predkosc_pilki[1] < 0:
+            predkosc_pilki[1] *= -1
+            predkosc_pilki[0] *= 1 + przyspieszenie_pilki
+            predkosc_pilki[1] *= 1 + przyspieszenie_pilki
 
         # Koniec gry
-        if ball.top > HEIGHT or ball.bottom < 0:
-            show_game_over()
-            game_over = True
+        if pilka.top > WYSOKOSC or pilka.bottom < 0:
+            pokaz_koniec_gry()
+            koniec = True
             continue
 
-        draw_objects()
+        rysuj_obiekty()
 
     pygame.quit()
     sys.exit()
