@@ -1,5 +1,6 @@
 import pygame
 import sys
+import random
 
 # Inicjalizacja
 pygame.init()
@@ -16,40 +17,58 @@ CZARNY = (0, 0, 0)
 # Parametry
 SZEROKOSC_PALETKI, WYSOKOSC_PALETKI = 100, 10
 PROMIEN_PILKI = 10
-przyspieszenie_pilki = 0.3
+przyspieszenie_pilki = [0.2, 0.3, 0.1, 0.6, 0.44]
 predkosc_ai = 5
 czcionka = pygame.font.SysFont(None, 36)
 zegar = pygame.time.Clock()
 
 def zresetuj_gre():
+    """Funkcja resetująca grę na pozycje początkowe"""
     global gracz, ai, pilka, predkosc_pilki
     gracz = pygame.Rect(SZEROKOSC // 2 - SZEROKOSC_PALETKI // 2, WYSOKOSC - 30, SZEROKOSC_PALETKI, WYSOKOSC_PALETKI)
-    ai = pygame.Rect(SZEROKOSC // 2 - SZEROKOSC_PALETKI // 2, 20, SZEROKOSC_PALETKI, WYSOKOSC_PALETKI)
+    ai = pygame.Rect(SZEROKOSC // 2 - SZEROKOSC_PALETKI // 2, 40, SZEROKOSC_PALETKI, WYSOKOSC_PALETKI)
     pilka = pygame.Rect(SZEROKOSC // 2, WYSOKOSC // 2, PROMIEN_PILKI, PROMIEN_PILKI)
-    predkosc_pilki = [4, 4]
+    
+    predkosc_pilki = [random.choice([-2, 2]), random.choice([-2, 2])]
 
-def rysuj_obiekty():
+def rysuj_obiekty(czas_gry = 0):
+    """Funkcja stylizuje okno gry, pokazuje aktulany czas gry"""
     OKNO.fill(CZARNY)
     pygame.draw.rect(OKNO, ZIELONY, gracz)
     pygame.draw.rect(OKNO, CZERWONY, ai)
     pygame.draw.ellipse(OKNO, BIALY, pilka)
+
+    # Czas gry
+    tekst_czas_gry = czcionka.render(f'Czas: {czas_gry // 1000}s', True, BIALY)
+    OKNO.blit(tekst_czas_gry, (SZEROKOSC // 2 - 50, 10))
+
     pygame.display.flip()
 
-def pokaz_koniec_gry():
+def pokaz_koniec_gry(tekst, czas, kolor):
+    "Funkcja pokazuje napisy końcowe, czas gry"
     OKNO.fill(CZARNY)
     tekst1 = czcionka.render("KONIEC GRY", True, CZERWONY)
     tekst2 = czcionka.render("Naciśnij R, aby zrestartować", True, BIALY)
-    OKNO.blit(tekst1, (SZEROKOSC // 2 - 80, WYSOKOSC // 2 - 30))
+    tekst3 = czcionka.render(tekst, True, kolor)
+    tekst4 = czcionka.render(f'Czas gry wynosi: {czas / 1000}s', True, BIALY)
+    OKNO.blit(tekst4, (SZEROKOSC // 2 - 120, WYSOKOSC // 2 - 30))
     OKNO.blit(tekst2, (SZEROKOSC // 2 - 150, WYSOKOSC // 2 + 10))
+    OKNO.blit(tekst1, (SZEROKOSC // 2 - 70, WYSOKOSC // 2 - 110))
+    OKNO.blit(tekst3, (SZEROKOSC // 2 - 60, WYSOKOSC // 2 - 70))
     pygame.display.flip()
 
 def main():
+    "Główna funkcja zajmująca się przebiegiem gry"
     zresetuj_gre()
     dziala = True
     koniec = False
 
+    start_czas = pygame.time.get_ticks()
+
     while dziala:
         zegar.tick(60)
+
+        czas_gry = pygame.time.get_ticks() - start_czas
         for zdarzenie in pygame.event.get():
             if zdarzenie.type == pygame.QUIT:
                 dziala = False
@@ -59,6 +78,7 @@ def main():
         if koniec:
             if klawisze[pygame.K_r]:
                 zresetuj_gre()
+                start_czas = pygame.time.get_ticks()
                 koniec = False
             continue
 
@@ -87,21 +107,24 @@ def main():
         # Odbicia od paletek i przyspieszenie
         if pilka.colliderect(gracz) and predkosc_pilki[1] > 0:
             predkosc_pilki[1] *= -1
-            predkosc_pilki[0] *= 1 + przyspieszenie_pilki
-            predkosc_pilki[1] *= 1 + przyspieszenie_pilki
+            predkosc_pilki[0] *= 1 + random.choice(przyspieszenie_pilki)
+            predkosc_pilki[1] *= 1 + random.choice(przyspieszenie_pilki)
 
         if pilka.colliderect(ai) and predkosc_pilki[1] < 0:
             predkosc_pilki[1] *= -1
-            predkosc_pilki[0] *= 1 + przyspieszenie_pilki
-            predkosc_pilki[1] *= 1 + przyspieszenie_pilki
+            predkosc_pilki[0] *= 1 + random.choice(przyspieszenie_pilki)
+            predkosc_pilki[1] *= 1 + random.choice(przyspieszenie_pilki)
 
         # Koniec gry
         if pilka.top > WYSOKOSC or pilka.bottom < 0:
-            pokaz_koniec_gry()
+            if pilka.top > WYSOKOSC:
+                pokaz_koniec_gry('Przegrana!', czas_gry, CZERWONY)
+            else:
+                pokaz_koniec_gry('Wygrana!', czas_gry,  ZIELONY)
             koniec = True
             continue
 
-        rysuj_obiekty()
+        rysuj_obiekty(czas_gry)
 
     pygame.quit()
     sys.exit()
