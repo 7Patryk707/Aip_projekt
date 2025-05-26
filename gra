@@ -131,3 +131,14 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
+
+
+
+# TODO
+# Ruch paletki na dole
+# Jak rysowane są obiekty (funkcja rysuj_obiekty())
+# Ogólne omówienie pygame
+# Pokazać kod
