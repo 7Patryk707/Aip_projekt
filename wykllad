@@ -1,0 +1,48 @@
+import pygame
+import sys
+
+# Ustawienia okna
+pygame.init()
+szerokosc, wysokosc = 800, 600
+okno = pygame.display.set_mode((szerokosc, wysokosc))
+pygame.display.set_caption("Poruszanie prostokątem")
+clock = pygame.time.Clock()
+
+# Kolory
+bialy = (255, 255, 255)
+czerwony = (255, 0, 0)
+niebieski = (0, 0, 255)
+
+czcionka = pygame.font.SysFont(None, 36)
+
+# Pozycja gracza
+x, y = 40, 570
+predkosc = 5
+
+# Pętla gry
+while True:
+    okno.fill(bialy)
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+
+    # Ruch klawiaturą
+    klawisze = pygame.key.get_pressed()
+    if klawisze[pygame.K_LEFT]: x -= predkosc
+    if klawisze[pygame.K_RIGHT]: x += predkosc
+
+    paletka = pygame.draw.rect(okno, czerwony, (x, y, 100, 20))
+    kwadrat = pygame.draw.rect(okno, niebieski, (600, 550, 40, 40))
+
+    if paletka.colliderect(kwadrat):
+        tekst = czcionka.render("Kolizja", True, czerwony)
+        okno.blit(tekst, (szerokosc // 2, wysokosc // 2))
+
+    # fps = clock.get_fps()
+    # fps_counter = czcionka.render(str(round(fps, 2)) + ' FPS', True, czerwony)
+    # okno.blit(fps_counter, (10, 10))
+
+    pygame.display.flip()
+    clock.tick(60)
